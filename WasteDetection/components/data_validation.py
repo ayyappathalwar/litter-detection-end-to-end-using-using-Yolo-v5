@@ -30,17 +30,14 @@ class DataValidation:
 
             all_files = os.listdir(self.data_ingestion_artifact.feature_store_file_path)
 
-            for file in all_files:
-                if file not in self.data_validation_config.required_file_list:
-                    validation_status = False
-                    os.makedirs(self.data_validation_config.data_validation_dir, exist_ok=True)
-                    with open(self.data_validation_config.valid_status_file_dir, 'w') as f:
-                        f.write(f"Validation status: {validation_status}")
-                else:
-                    validation_status = True
-                    os.makedirs(self.data_validation_config.data_validation_dir, exist_ok=True)
-                    with open(self.data_validation_config.valid_status_file_dir, 'w') as f:
-                        f.write(f"Validation status: {validation_status}")
+            validation_status = all(
+                required in all_files
+                for required in self.data_validation_config.required_file_list
+            )
+
+            os.makedirs(self.data_validation_config.data_validation_dir, exist_ok=True)
+            with open(self.data_validation_config.valid_status_file_dir, 'w') as f:
+                f.write(f"Validation status: {validation_status}")
 
             return validation_status
         
