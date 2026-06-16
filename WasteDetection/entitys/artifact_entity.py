@@ -9,3 +9,7 @@ class DataIngestionArtifact:
 @dataclass
 class DataValidationArtifact:
     validation_status: bool
+
+@dataclass
+class Model_Trainer_Artifact:
+    trained_model_file_path: str
