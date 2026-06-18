@@ -34,11 +34,11 @@ def predictRoute():
         image = request.json['image']
         decode_image(image, clApp.filename)
 
-        os.system("cd yolov5 && python detect.py --weights best.pt --img 640 --conf 0.3 --source ../data/inputImage.jpg")
+        os.system("cd yolov5/ && python detect.py --weights best.pt --img 416 --conf 0.5 --source ../data/inputImage.jpg")
 
         opencodedbase64 = encode_image("yolov5/runs/detect/exp/inputImage.jpg")
         result = {"image": opencodedbase64.decode('utf-8')}
-        os.system("rmdir /s /q yolov5\\runs")
+        os.system("rm -rf yolov5/runs")
 
     except ValueError as val:
         print(val)
@@ -56,8 +56,8 @@ def predictRoute():
 @cross_origin
 def predictive():
     try:
-        os.system("cd yolov5 && python detect.py --weights best.pt --img 416 --conf 0.5 --source 0")
-        os.system("rmdir /s /q yolov5\\runs")
+        os.system("cd yolov5/ && python detect.py --weight best.pt --img 416 --conf 0.5 --source 0")
+        os.system("rm -rf yolov5/runs")
         return "Camera starting!!"
         
     except ValueError as val:
