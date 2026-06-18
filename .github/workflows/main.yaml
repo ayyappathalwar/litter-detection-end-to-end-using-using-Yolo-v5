@@ -82,17 +82,18 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
 
+      - name: Stop and remove container if running
+        run: |
+         docker ps -q --filter "name=waste" | grep -q . && docker stop waste && docker rm -fv waste || true
+
+      - name: Clean previous images and containers
+        run: |
+         docker system prune -af
+
       - name: Pull latest images
         run: |
          docker pull ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-         
-      # - name: Stop and remove  container if running
-      #   run: |
-      #    docker ps -q --filter "name=waste" | grep -q . && docker stop waste && docker rm -fv waste
-       
+
       - name: Run Docker Image to serve users
         run: |
          docker run -d -p 8081:8081 --ipc="host" --name=waste -e 'AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}' -e 'AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}' -e 'AWS_REGION=eu-north-1'  ${{secrets.AWS_ECR_LOGIN_URI}}/${{ secrets.ECR_REPOSITORY_NAME }}:latest
-      - name: Clean previous images and containers
-        run: |
-         docker system prune -f
