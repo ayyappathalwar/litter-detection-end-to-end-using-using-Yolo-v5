@@ -5,7 +5,7 @@ COPY . /app
 RUN apt update -y && apt install awscli git -y
 
 RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 unzip -y \
-    && git clone https://github.com/ultralytics/yolov5.git /app/yolov5 \
+    && rm -rf /app/yolov5 && git clone https://github.com/ultralytics/yolov5.git /app/yolov5 \
     && pip install -r requirements.txt \
     && pip install . \
     && ln -sf /app/WasteDetection /app/wasteDetection \
