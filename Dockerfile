@@ -6,6 +6,9 @@ RUN apt update -y && apt install awscli -y
 
 RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 unzip -y \
     && pip install -r requirements.txt \
-    && pip install -e .
+    && pip install . \
+    && ln -sf /app/WasteDetection /app/wasteDetection
+
+ENV PYTHONPATH=/app
 EXPOSE 8081
 CMD ["python3", "app.py"]
